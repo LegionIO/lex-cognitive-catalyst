@@ -13,7 +13,10 @@ module Legion
           end
 
           def create_catalyst(catalyst_type:, domain:, potency: 0.5, specificity: 0.5, **)
-            raise ArgumentError, "invalid catalyst_type: #{catalyst_type}" unless CATALYST_TYPES.include?(catalyst_type.to_sym)
+            unless CATALYST_TYPES.include?(catalyst_type.to_sym)
+              raise ArgumentError,
+                    "invalid catalyst_type: #{catalyst_type}"
+            end
 
             evict_oldest_catalyst if @catalysts.size >= MAX_CATALYSTS
             catalyst = Catalyst.new(
@@ -27,7 +30,10 @@ module Legion
           end
 
           def create_reaction(reaction_type:, reactants:, activation_energy: ACTIVATION_ENERGY, **)
-            raise ArgumentError, "invalid reaction_type: #{reaction_type}" unless REACTION_TYPES.include?(reaction_type.to_sym)
+            unless REACTION_TYPES.include?(reaction_type.to_sym)
+              raise ArgumentError,
+                    "invalid reaction_type: #{reaction_type}"
+            end
 
             evict_oldest_reaction if @reactions.size >= MAX_REACTIONS
             reaction = Reaction.new(
@@ -49,10 +55,10 @@ module Legion
 
             reaction.apply_catalyst!(catalyst)
             {
-              success:          true,
+              success:           true,
               activation_energy: reaction.activation_energy,
-              catalyst_id:      catalyst_id,
-              reaction_id:      reaction_id
+              catalyst_id:       catalyst_id,
+              reaction_id:       reaction_id
             }
           end
 
@@ -63,11 +69,11 @@ module Legion
 
             completed = reaction.attempt!(energy_input)
             {
-              success:          true,
-              completed:        completed,
-              yield_value:      reaction.yield_value,
-              yield_label:      reaction.yield_label,
-              catalyzed:        reaction.catalyzed?,
+              success:           true,
+              completed:         completed,
+              yield_value:       reaction.yield_value,
+              yield_label:       reaction.yield_label,
+              catalyzed:         reaction.catalyzed?,
               activation_energy: reaction.activation_energy
             }
           end

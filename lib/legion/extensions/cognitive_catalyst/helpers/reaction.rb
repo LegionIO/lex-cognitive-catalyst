@@ -63,17 +63,17 @@ module Legion
 
           def to_h
             {
-              id:               @id,
-              reaction_type:    @reaction_type,
-              reactants:        @reactants,
+              id:                @id,
+              reaction_type:     @reaction_type,
+              reactants:         @reactants,
               activation_energy: @activation_energy,
-              yield_value:      @yield_value,
-              yield_label:      yield_label,
-              catalyzed:        @catalyzed,
-              catalyst_id:      @catalyst_id,
-              completed:        @completed,
-              spontaneous:      spontaneous?,
-              created_at:       @created_at
+              yield_value:       @yield_value,
+              yield_label:       yield_label,
+              catalyzed:         @catalyzed,
+              catalyst_id:       @catalyst_id,
+              completed:         @completed,
+              spontaneous:       spontaneous?,
+              created_at:        @created_at
             }
           end
         end

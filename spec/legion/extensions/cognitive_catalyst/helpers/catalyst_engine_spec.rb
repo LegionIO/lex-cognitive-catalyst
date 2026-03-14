@@ -76,7 +76,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Helpers::CatalystEngine do
 
   describe '#apply_catalyst' do
     let(:catalyst) { build_catalyst }
-    let(:reaction)  { build_reaction }
+    let(:reaction) { build_reaction }
 
     it 'returns success with updated activation_energy' do
       result = engine.apply_catalyst(catalyst_id: catalyst.id, reaction_id: reaction.id)

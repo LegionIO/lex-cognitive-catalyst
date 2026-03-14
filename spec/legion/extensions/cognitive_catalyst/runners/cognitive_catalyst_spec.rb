@@ -4,14 +4,14 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
   let(:client) { Legion::Extensions::CognitiveCatalyst::Client.new }
   let(:engine) { Legion::Extensions::CognitiveCatalyst::Helpers::CatalystEngine.new }
 
-  def create_catalyst(client_instance = client, **opts)
+  def create_catalyst(client_instance = client, **)
     defaults = { catalyst_type: :insight, domain: :reasoning, engine: engine }
-    client_instance.create_catalyst(**defaults.merge(opts))
+    client_instance.create_catalyst(**defaults, **)
   end
 
-  def create_reaction(client_instance = client, **opts)
+  def create_reaction(client_instance = client, **)
     defaults = { reaction_type: :synthesis, reactants: %w[idea_a idea_b], engine: engine }
-    client_instance.create_reaction(**defaults.merge(opts))
+    client_instance.create_reaction(**defaults, **)
   end
 
   describe '#create_catalyst' do
@@ -89,7 +89,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
       rxn    = create_reaction
       result = client.apply_catalyst(catalyst_id: cat[:catalyst][:id],
                                      reaction_id: rxn[:reaction][:id],
-                                     engine: engine)
+                                     engine:      engine)
       expect(result[:success]).to be true
       expect(result[:activation_energy]).to be < 0.6
     end
@@ -98,7 +98,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
       rxn    = create_reaction
       result = client.apply_catalyst(catalyst_id: 'bad',
                                      reaction_id: rxn[:reaction][:id],
-                                     engine: engine)
+                                     engine:      engine)
       expect(result[:success]).to be false
     end
 
@@ -106,7 +106,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
       cat    = create_catalyst
       result = client.apply_catalyst(catalyst_id: cat[:catalyst][:id],
                                      reaction_id: 'bad',
-                                     engine: engine)
+                                     engine:      engine)
       expect(result[:success]).to be false
     end
   end
@@ -114,25 +114,25 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
   describe '#attempt_reaction' do
     it 'completes reaction with sufficient energy' do
       rxn    = create_reaction
-      result = client.attempt_reaction(reaction_id: rxn[:reaction][:id],
+      result = client.attempt_reaction(reaction_id:  rxn[:reaction][:id],
                                        energy_input: 1.0,
-                                       engine: engine)
+                                       engine:       engine)
       expect(result[:completed]).to be true
     end
 
     it 'does not complete with insufficient energy' do
       rxn    = create_reaction
-      result = client.attempt_reaction(reaction_id: rxn[:reaction][:id],
+      result = client.attempt_reaction(reaction_id:  rxn[:reaction][:id],
                                        energy_input: 0.1,
-                                       engine: engine)
+                                       engine:       engine)
       expect(result[:completed]).to be false
     end
 
     it 'includes yield data when completed' do
       rxn    = create_reaction
-      result = client.attempt_reaction(reaction_id: rxn[:reaction][:id],
+      result = client.attempt_reaction(reaction_id:  rxn[:reaction][:id],
                                        energy_input: 1.0,
-                                       engine: engine)
+                                       engine:       engine)
       expect(result).to include(:yield_value, :yield_label)
     end
 
@@ -208,7 +208,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Runners::CognitiveCatalyst
     end
 
     it 'reflects completed reactions in report' do
-      rxn    = create_reaction
+      rxn = create_reaction
       client.attempt_reaction(reaction_id: rxn[:reaction][:id], energy_input: 1.0, engine: engine)
       result = client.catalyst_status(engine: engine)
       expect(result[:completed]).to eq(1)

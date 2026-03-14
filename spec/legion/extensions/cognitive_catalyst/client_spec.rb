@@ -20,7 +20,7 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Client do
     rxn = client.create_reaction(reaction_type: :synthesis, reactants: %w[a b], engine: engine)
     result = client.apply_catalyst(catalyst_id: cat[:catalyst][:id],
                                    reaction_id: rxn[:reaction][:id],
-                                   engine: engine)
+                                   engine:      engine)
     expect(result[:success]).to be true
     expect(result[:activation_energy]).to be < 0.6
   end
@@ -29,16 +29,16 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Client do
     engine = Legion::Extensions::CognitiveCatalyst::Helpers::CatalystEngine.new
     cat = client.create_catalyst(catalyst_type: :insight, domain: :reasoning,
                                  potency: 1.0, specificity: 1.0, engine: engine)
-    rxn = client.create_reaction(reaction_type: :decomposition,
-                                 reactants: %w[complex_idea],
+    rxn = client.create_reaction(reaction_type:     :decomposition,
+                                 reactants:         %w[complex_idea],
                                  activation_energy: 0.1,
-                                 engine: engine)
+                                 engine:            engine)
     client.apply_catalyst(catalyst_id: cat[:catalyst][:id],
                           reaction_id: rxn[:reaction][:id],
-                          engine: engine)
-    result = client.attempt_reaction(reaction_id: rxn[:reaction][:id],
+                          engine:      engine)
+    result = client.attempt_reaction(reaction_id:  rxn[:reaction][:id],
                                      energy_input: 0.8,
-                                     engine: engine)
+                                     engine:       engine)
     expect(result[:completed]).to be true
     expect(result[:catalyzed]).to be true
     status = client.catalyst_status(engine: engine)

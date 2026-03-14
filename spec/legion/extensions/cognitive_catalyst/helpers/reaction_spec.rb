@@ -110,9 +110,10 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Helpers::Reaction do
         expect(reaction.yield_value).to be > 0.5
       end
 
-      it 'returns maximum yield on full surplus' do
-        reaction.attempt!(1.0)
-        expect(reaction.yield_value).to eq(1.0)
+      it 'returns maximum yield on full surplus (activation_energy=0)' do
+        r = described_class.new(reaction_type: :synthesis, reactants: [], activation_energy: 0.0)
+        r.attempt!(1.0)
+        expect(r.yield_value).to eq(1.0)
       end
 
       it 'returns minimum passing yield at exact threshold' do
@@ -193,15 +194,16 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Helpers::Reaction do
       expect(reaction.yield_label).to eq(:negligible)
     end
 
-    it 'returns :excellent for high yield' do
-      reaction.attempt!(1.0)
-      expect(reaction.yield_label).to eq(:excellent)
+    it 'returns :excellent for high yield (activation_energy=0, full surplus)' do
+      r = described_class.new(reaction_type: :synthesis, reactants: [], activation_energy: 0.0)
+      r.attempt!(1.0)
+      expect(r.yield_label).to eq(:excellent)
     end
 
     it 'returns :fair for moderate yield' do
       r = described_class.new(reaction_type: :synthesis, reactants: [], activation_energy: 0.1)
       r.attempt!(0.2)
-      expect([:fair, :good, :poor, :excellent, :negligible]).to include(r.yield_label)
+      expect(%i[fair good poor excellent negligible]).to include(r.yield_label)
     end
   end
 
@@ -209,8 +211,8 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Helpers::Reaction do
     it 'includes all required keys' do
       h = reaction.to_h
       expect(h).to include(:id, :reaction_type, :reactants, :activation_energy,
-                            :yield_value, :yield_label, :catalyzed, :catalyst_id,
-                            :completed, :spontaneous, :created_at)
+                           :yield_value, :yield_label, :catalyzed, :catalyst_id,
+                           :completed, :spontaneous, :created_at)
     end
 
     it 'reflects completed state' do

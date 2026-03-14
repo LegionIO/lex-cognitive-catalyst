@@ -202,8 +202,8 @@ RSpec.describe Legion::Extensions::CognitiveCatalyst::Helpers::Catalyst do
     it 'returns a hash with all required keys' do
       h = catalyst.to_h
       expect(h).to include(:id, :catalyst_type, :domain, :potency, :specificity,
-                            :uses_count, :potency_label, :powerful, :inert,
-                            :specific, :broad, :created_at)
+                           :uses_count, :potency_label, :powerful, :inert,
+                           :specific, :broad, :created_at)
     end
 
     it 'reflects current state' do

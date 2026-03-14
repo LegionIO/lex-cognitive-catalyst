@@ -25,10 +25,9 @@ module Legion
           # Apply this catalyst to a reaction — increments uses_count but does NOT reduce potency
           # Catalysts are not consumed by use; they are reusable accelerators
           # Returns activation_reduction = potency * specificity
-          def catalyze!(reaction_type)
+          def catalyze!(_reaction_type)
             @uses_count += 1
-            activation_reduction = (@potency * @specificity).round(10)
-            activation_reduction
+            (@potency * @specificity).round(10)
           end
 
           # Degrade from environmental wear (not from use)
